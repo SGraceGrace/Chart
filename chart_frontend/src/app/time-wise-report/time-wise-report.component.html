@@ -1,0 +1,18 @@
+<select name="month" id="month" [(ngModel)]="selectedMonth">
+    <option *ngFor="let month of months; let index" [value]="month.value">
+      {{ month.name }}
+    </option>
+  </select>
+  
+  <select name="year" id="year" [(ngModel)]="selectedYear">
+    <option *ngFor="let year of years; let index" [value]="year.name">
+      {{ year.name }}
+    </option>
+  </select>
+  
+  <button type="button" (click)="onSelect()">Enter</button>
+  
+  <div class="chart">
+    <canvas id="chart"></canvas>
+  </div>
+  
