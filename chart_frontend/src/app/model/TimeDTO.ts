@@ -1,5 +1,5 @@
 export interface TimeDTO {
   interval: number
-  times: Date[]
+  times: string
   count: number
 }

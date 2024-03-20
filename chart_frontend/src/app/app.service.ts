@@ -44,7 +44,7 @@ export class AppService {
     return this.http.get<YearDTO[]>(this.yearWiseUrl);
   }
 
-  getUsersByTime(month: number, year: number): Observable<TimeDTO[]>{
-    return this.http.get<TimeDTO[]>(`${this.timeWiseUrl}/${month}/${year}`);
+  getUsersByTime(date: number, month: number, year: number): Observable<TimeDTO[]>{
+    return this.http.get<TimeDTO[]>(`${this.timeWiseUrl}/${date}/${month}/${year}`);
   }
 }

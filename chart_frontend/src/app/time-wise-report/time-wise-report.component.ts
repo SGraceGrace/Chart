@@ -9,10 +9,11 @@ import { Chart } from 'chart.js';
 })
 export class TimeWiseReportComponent {
 
-  times: any;
+  times: string[] = [];
   count: number[] = [];
   selectedMonth: number = 1;
   selectedYear: number = 2023;
+  selectedDate: number = 1;
   months = [
     {
       value: 1,
@@ -67,12 +68,12 @@ export class TimeWiseReportComponent {
   years = [
     {
       value: 1,
-      name: '2023',
+      name: 2023,
     },
     {
       value: 2,
-      name: '2024',
-    },
+      name: 2024,
+    }
   ];
 
   constructor(private appService: AppService){}
@@ -80,7 +81,7 @@ export class TimeWiseReportComponent {
   getUsersByTime(){
     this.times = [];
     this.count = [];
-    this.appService.getUsersByTime(5, 2023).subscribe((response) => {
+    this.appService.getUsersByTime(this.selectedDate, this.selectedMonth, this.selectedYear).subscribe((response) => {
       response.forEach((data) => {
         this.times.push(data.times);
         this.count.push(data.count);

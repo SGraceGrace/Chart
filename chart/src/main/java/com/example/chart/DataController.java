@@ -45,8 +45,8 @@ public class DataController {
 		return service.getUserByYear();
 	}
 	
-	@GetMapping("/get-user-time/{month}/{year}")
-	public List<TimeResponseDTO>  getUserByTime(@PathVariable int month, @PathVariable int year){
-		return service.getUserByTime(month, year);
+	@GetMapping("/get-user-time/{date}/{month}/{year}")
+	public List<TimeResponseDTO>  getUserByTime(@PathVariable int date, @PathVariable int month, @PathVariable int year){
+		return service.getUserByTime(date, month, year);
 	}
 }

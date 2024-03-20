@@ -1,36 +1,19 @@
 package com.example.chart;
 
-import java.text.DateFormat;
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
-import org.springframework.data.mongodb.core.aggregation.SortOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -172,7 +155,7 @@ public class DataService {
 		return yearDTOs;
 	}
 
-	public List<TimeResponseDTO> getUserByTime(int month, int year) {
+	public List<TimeResponseDTO> getUserByTime(int date, int month, int year) {
 
 		List<User> users = repository.findAll();
 
@@ -183,24 +166,20 @@ public class DataService {
 			LocalDate localDate = user.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 			int year2 = localDate.getYear();
 
-			if (user.getDate().getMonth() == month && year2 == year) {
-				Date date = user.getDate();
-				int hour = date.getHours();
+			if (user.getDate().getDate() == date && user.getDate().getMonth() == month && year2 == year) {
+				Date date1 = user.getDate();
+				int hour = date1.getHours();
 				int interval = hour / 2;
+				
+				String time = date1.getHours() + ":" + date1.getMinutes() + ":" + date1.getSeconds();
 
 				if (timeResponseDTOs.size() == 0) {
-					ArrayList<Date> dates = new ArrayList<Date>();
-					dates.add(date);
-					
-					TimeResponseDTO timeResponseDTO = TimeResponseDTO.builder().interval(interval).times(dates).count(1).build();
+					TimeResponseDTO timeResponseDTO = TimeResponseDTO.builder().interval(interval).times(time).count(1).build();
 					timeResponseDTOs.add(timeResponseDTO);
 				} else {
 					for (TimeResponseDTO timeResponseDTO : timeResponseDTOs) {
 						if (timeResponseDTO.getInterval() == interval) {
-							ArrayList<Date> dates = new ArrayList<Date>(); // Create a new ArrayList for each TimeResponseDTO
-					        dates.addAll(timeResponseDTO.getTimes()); // Copy existing dates if needed
-					        dates.add(date); // Add the new date
-					        timeResponseDTO.setTimes(dates); // Set the new list to the TimeResponseDTO
+					        timeResponseDTO.setTimes(timeResponseDTO.getTimes()+","+time);
 					        timeResponseDTO.setCount(timeResponseDTO.getCount() + 1);
 					        flag = 1;
 					        break;
@@ -208,17 +187,12 @@ public class DataService {
 					}
 
 					if (flag == 0) {
-						ArrayList<Date> dates = new ArrayList<Date>();
-						dates.add(date);
-						TimeResponseDTO timeResponseDTO = TimeResponseDTO.builder().interval(interval).times(dates).count(1).build();
+						TimeResponseDTO timeResponseDTO = TimeResponseDTO.builder().interval(interval).times(time).count(1).build();
 						timeResponseDTOs.add(timeResponseDTO);
 					}
 				}
 			}
 		}
-		
-		System.out.println(timeResponseDTOs);
-
 		return timeResponseDTOs;
 	}
 }

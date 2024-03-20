@@ -1,3 +1,6 @@
+
+<input type="number" name="date" id="date" [(ngModel)]="selectedDate" min="1" max="30">
+
 <select name="month" id="month" [(ngModel)]="selectedMonth">
     <option *ngFor="let month of months; let index" [value]="month.value">
       {{ month.name }}

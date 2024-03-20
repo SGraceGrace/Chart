@@ -1,8 +1,5 @@
 package com.example.chart;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
@@ -15,8 +12,8 @@ public class TimeResponseDTO {
 	@JsonProperty("interval")
 	private int interval;
 
-	@JsonProperty("time")
-	private ArrayList<Date> times;
+	@JsonProperty("times")
+	private String times;
 	
 	@JsonProperty("count")
 	public int count;
